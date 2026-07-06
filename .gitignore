@@ -19,4 +19,5 @@ venv/
 
 # Development settings (may contain secrets)
 appsettings.Development.json
+#exclude
 appsettings.json
