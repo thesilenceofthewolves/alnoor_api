@@ -5,6 +5,9 @@ builder.Services.AddSingleton<StoredProcedureExecutor>();
 
 var app = builder.Build();
 
+// TEST ROUTE (critical)
+app.MapGet("/", () => "Alnoor is running");
+
 app.MapStaffEndpoints();
 app.MapClientEndpoints();
 app.MapShiftEndpoints();
