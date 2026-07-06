@@ -1,0 +1,7 @@
+In Azure go to:
+App Service → Configuration → Application settings
+Add:
+Name:
+ConnectionStrings__DefaultConnection
+Value:
+Server=tcp:yourserver.database.windows.net,1433;Initial Catalog=yourdatabase;User ID=youruseradmin;Password=YOUR_PASSWORD;Encrypt=True;
