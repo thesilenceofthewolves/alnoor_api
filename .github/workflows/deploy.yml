@@ -1,0 +1,63 @@
+permissions:
+  id-token: write
+  contents: read
+name: Build and deploy ASP.Net Core app to Azure Web App - alnoor
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore dependencies
+        run: dotnet restore StaffManagementAPI.csproj
+
+      - name: Build project
+        run: dotnet build StaffManagementAPI.csproj --configuration Release --no-restore
+
+      - name: Publish project
+        run: dotnet publish StaffManagementAPI.csproj -c Release -o publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: publish
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app
+          path: publish
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E06BE0556AD143A987075D05B466B72A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_975457C351434B74AB993E334F0AAE07 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2208AEC383AD4EB180264C437A32B234 }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: alnoor
+          slot-name: Production
+          package: publish
