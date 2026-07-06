@@ -13,5 +13,12 @@ app.MapClientEndpoints();
 app.MapShiftEndpoints();
 app.MapBillingEndpoints();
 app.MapPayslipEndpoints();
+app.MapGet("/test-db", async (SqlConnectionFactory factory) =>
+{
+    using var conn = factory.Create();
+    await conn.OpenAsync();
+
+    return Results.Ok("Database connection SUCCESS");
+});
 
 app.Run();
