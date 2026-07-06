@@ -5,20 +5,29 @@ builder.Services.AddSingleton<StoredProcedureExecutor>();
 
 var app = builder.Build();
 
-// TEST ROUTE (critical)
+// Health check
 app.MapGet("/", () => "Alnoor is running");
 
+// Database connection test
+app.MapGet("/test-db", async (SqlConnectionFactory factory) =>
+{
+    try
+    {
+        using var conn = factory.Create();
+        await conn.OpenAsync();
+        return Results.Ok("DB CONNECTED");
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.ToString());
+    }
+});
+
+// API endpoints
 app.MapStaffEndpoints();
 app.MapClientEndpoints();
 app.MapShiftEndpoints();
 app.MapBillingEndpoints();
 app.MapPayslipEndpoints();
-app.MapGet("/test-db", async (SqlConnectionFactory factory) =>
-{
-    using var conn = factory.Create();
-    await conn.OpenAsync();
-
-    return Results.Ok("Database connection SUCCESS");
-});
 
 app.Run();
