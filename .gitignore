@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+
+# User files
+*.user
+*.suo
+
+# Python
+venv/
+
+# Logs
+*.log
+
+# Development settings (may contain secrets)
+appsettings.Development.json
