@@ -1,3 +1,6 @@
+permissions:
+  id-token: write
+  contents: read
 name: Build and deploy ASP.Net Core app to Azure Web App - alnoor
 
 on:
